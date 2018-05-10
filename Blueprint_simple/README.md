@@ -1,0 +1,1 @@
+# flask_Blueprint用法，简单应用程序目录示例
