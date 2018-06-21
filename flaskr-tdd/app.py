@@ -1,11 +1,17 @@
-from flask import Flask
+# imports
+import sqlite3
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 
-# app init
+# configuration
+DATABASE = 'flaskr.db'
+DEBUG = True
+SECRET_KEY = 'Allen Secret Key'
+USERNAME = 'admin'
+PASSWORD = 'admin'
+
+# create and initialize app
 app = Flask(__name__)
-
-@app.route('/')
-def hello():
-    return 'Hello, World!'
+app.config.from_object(__name__)
 
 if __name__ == '__main__':
     app.run()
