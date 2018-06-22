@@ -19,12 +19,13 @@ class BasicTestCase(unittest.TestCase):
         tester = app.app.test_client(self)
         response = tester.get('/', content_type='html/text')
         self.assertEqual(response.status_code, 200)
+        print('test_index success!')
 
     def test_database(self):
         """Initial test: Ensure that the database exists."""
         tester = os.path.exists("flaskr.db")
         self.assertEqual(tester, True)
-
+        print('test_database success!')
 
 class FlaskrTestCase(unittest.TestCase):
 
@@ -34,11 +35,13 @@ class FlaskrTestCase(unittest.TestCase):
         app.app.config['TESTING'] = True
         self.app = app.app.test_client()
         app.init_db()
+        # print('FlaskrTestCase setUp success!')
 
     def tearDown(self):
         """Destroy blank temp database after each test."""
         os.close(self.db_fd)
         os.unlink(app.app.config['DATABASE'])
+        # print('FlaskrTestCase tearDown success!')
 
     def login(self, username, password):
         """Login helper function."""
@@ -46,6 +49,7 @@ class FlaskrTestCase(unittest.TestCase):
             username=username,
             password=password
         ), follow_redirects=True)
+
 
     def logout(self):
         """Logout helper function."""
@@ -57,6 +61,7 @@ class FlaskrTestCase(unittest.TestCase):
         """Ensure database is blank."""
         rv = self.app.get('/')
         assert b'No entries here so far' in rv.data
+        print('test_empty_db success!')
 
     def test_login_logout(self):
         """Test login and logout using helper functions."""
@@ -77,6 +82,7 @@ class FlaskrTestCase(unittest.TestCase):
             app.app.config['PASSWORD'] + 'x'
         )
         assert b'Invalid password' in rv.data
+        print('test_login_logout success!')
 
     def test_messages(self):
         """Ensure that a user can post messages."""
@@ -91,7 +97,7 @@ class FlaskrTestCase(unittest.TestCase):
         assert b'No entries here so far' not in rv.data
         assert b'&lt;Hello&gt;' in rv.data
         assert b'<strong>HTML</strong> allowed here' in rv.data
-
+        print('test_message success!')
 
 if __name__ == '__main__':
     unittest.main()
