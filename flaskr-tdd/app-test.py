@@ -1,7 +1,7 @@
 import unittest
 import os
 import tempfile
-
+import json
 import app
 
 """
@@ -33,6 +33,7 @@ class FlaskrTestCase(unittest.TestCase):
         """Set up a blank temp database before each test."""
         self.db_fd, app.app.config['DATABASE'] = tempfile.mkstemp()
         app.app.config['TESTING'] = True
+        # 测试客户端可以发GET, POST 请求等
         self.app = app.app.test_client()
         app.init_db()
         # print('FlaskrTestCase setUp success!')
@@ -84,7 +85,7 @@ class FlaskrTestCase(unittest.TestCase):
         assert b'Invalid password' in rv.data
         print('test_login_logout success!')
 
-    def test_messages(self):
+    def test_post(self):
         """Ensure that a user can post messages."""
         self.login(
             app.app.config['USERNAME'],
@@ -97,7 +98,14 @@ class FlaskrTestCase(unittest.TestCase):
         assert b'No entries here so far' not in rv.data
         assert b'&lt;Hello&gt;' in rv.data
         assert b'<strong>HTML</strong> allowed here' in rv.data
-        print('test_message success!')
+        print('test_post success!')
+
+    def test_delete_post(self):
+        """Ensure the messages are being deleted."""
+        rv = self.app.get('/delete/1')
+        data = json.loads((rv.data).decode('utf-8'))
+        self.assertEqual(data['status'], 1)
+        print('test_delete_post success!')
 
 if __name__ == '__main__':
     unittest.main()

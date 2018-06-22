@@ -37,6 +37,7 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
+
 # close databse connection
 @app.teardown_appcontext
 def close_db(error):
@@ -53,6 +54,7 @@ def index():
     entries = cur.fetchall()
     return render_template('index.html', entries=entries)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """User login/authentication/session management"""
@@ -68,12 +70,14 @@ def login():
             return redirect(url_for('index'))
     return render_template('login.html', error=error)
 
+
 @app.route('/logout')
 def logout():
     """User logout/authentication/session management."""
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('index'))
+
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -89,9 +93,20 @@ def add_entry():
     flash('New entry was successfully posted')
     return redirect(url_for('index'))
 
+@app.route('/delete/<post_id>', methods=['GET'])
+def delete_entry(post_id):
+    """Delete post from database"""
+    result = {'status': 0, 'message': 'Error'}
+    try:
+        db = get_db()
+        db.execute('DELETE FROM entries WHERE id=' + post_id)
+        db.commit()
+        result = {'status': 1, 'message': 'Post Deleted'}
+    except Exception as e:
+        result = {'status': 0, 'message': repr(e)}
+    # 以json的形式返回给前端
+    return jsonify(result)
+
 if __name__ == '__main__':
     init_db()
     app.run()
-
-
-
