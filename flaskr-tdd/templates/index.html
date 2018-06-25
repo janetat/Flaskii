@@ -1,52 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Flaskr</title>
+    <title>Flaskr</title>
+    <link href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-  <div class="container">
+<div class="container">
 
     <h1>Flaskr-TDD</h1>
 
     {% if not session.logged_in %}
-      <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
+        <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
     {% else %}
-      <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
+        <a class="btn btn-warning" role="button" href="{{ url_for('logout') }}">log out</a>
     {% endif %}
 
     <br><br>
 
     {% for message in get_flashed_messages() %}
-      <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
+        <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
 
     {% if session.logged_in %}
-      <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
-        <dl>
-          <dt>Title:</dt>
-          <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
-          <dt>Text:</dt>
-          <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
-          <br><br>
-          <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
-        </dl>
-      </form>
+        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
+            <dl>
+                <dt>Title:</dt>
+                <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
+                <dt>Text:</dt>
+                <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
+                <br><br>
+                <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
+            </dl>
+        </form>
     {% endif %}
 
     <br>
 
     <ul class="entries">
-      {% for entry in entries %}
-        <li class="entry"><h2 id="{{ entry.id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-      {% else %}
-        <li><em>No entries yet. Add some!</em></li>
-      {% endfor %}
+        {% for entry in entries %}
+            <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+        {% else %}
+            <li><em>No entries yet. Add some!</em></li>
+        {% endfor %}
     </ul>
 
-  </div>
+</div>
 
-  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-  <script type="text/javascript" src="{{url_for('static', filename='main.js') }}"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
 
 </body>
