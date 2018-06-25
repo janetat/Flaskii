@@ -61,7 +61,7 @@ class FlaskrTestCase(unittest.TestCase):
     def test_empty_db(self):
         """Ensure database is blank."""
         rv = self.app.get('/')
-        assert b'No entries here so far' in rv.data
+        assert b'No entries yet. Add some!' in rv.data
         print('test_empty_db success!')
 
     def test_login_logout(self):
