@@ -9,7 +9,8 @@
 <div class="container">
 
     <h1>Flaskr-TDD</h1>
-    <a class="btn btn-info" role="button" href="{{ url_for('search') }}">Search</a>
+
+    <a class="btn btn-primary" role="button" href="{{ url_for('index') }}"> Home </a>
 
     {% if not session.logged_in %}
         <a class="btn btn-success" role="button" href="{{ url_for('login') }}">log in</a>
@@ -23,28 +24,23 @@
         <div class="flash alert alert-success col-sm-4" role="success">{{ message }}</div>
     {% endfor %}
 
-    {% if session.logged_in %}
-        <form action="{{ url_for('add_entry') }}" method="post" class="add-entry form-group">
-            <dl>
-                <dt>Title:</dt>
-                <dd><input type="text" size="30" name="title" class="form-control col-sm-4"></dd>
-                <dt>Text:</dt>
-                <dd><textarea name="text" rows="5" cols="40" class="form-control col-sm-4"></textarea></dd>
-                <br><br>
-                <dd><input type="submit" class="btn btn-primary" value="Share"></dd>
-            </dl>
-        </form>
-    {% endif %}
-
-    <br>
+    <form action="{{ url_for('search') }}" method="get" class="form-group">
+        <dl>
+            <dt>Search:</dt>
+            <dd><input type="text" name="query" class="form-control col-sm-4"></dd>
+            <br>
+            <dd><input type="submit" class="btn btn-info" value="Search"></dd>
+        </dl>
+    </form>
 
     <ul class="entries">
         {% for entry in entries %}
-            <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
-        {% else %}
-            <li><em>No entries yet. Add some!</em></li>
+            {% if query.lower() in entry.title.lower() or query.lower() in entry.text.lower() %}
+                <li class="entry"><h2 id="{{ entry.post_id }}">{{ entry.title }}</h2>{{ entry.text|safe }}</li>
+            {% endif %}
         {% endfor %}
     </ul>
+
 
 </div>
 
@@ -52,3 +48,4 @@
 <script type="text/javascript" src="{{ url_for('static', filename='main.js') }}"></script>
 
 </body>
+</html>
