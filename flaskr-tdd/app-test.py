@@ -75,6 +75,18 @@ class FlaskrTestCase(unittest.TestCase):
         self.assertNotIn(b'No entries here so far', rv.data)
         self.assertIn(b'&lt;Hello&gt;', rv.data)
         self.assertIn(b'<strong>HTML</strong> allowed here', rv.data)
+        print('test_messages success')
+
+    def test_search(self):
+        """Ensure that search works"""
+        self.login(app.config['USERNAME'], app.config['PASSWORD'])
+
+        rv = self.app.get('/search', data=dict(
+            query='a'
+        ), follow_redirects=True)
+
+        self.assertIn(b'a', rv.data)
+        print('test_search success!')
 
     def test_delete_message(self):
         """Ensure the messages are being deleted"""
